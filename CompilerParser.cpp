@@ -5,9 +5,9 @@
  * Constructor for the CompilerParser
  * @param tokens A linked list of tokens to be parsed
  */
-CompilerParser::CompilerParser(std::list<Token*> tokens) {
-    this->tokens = tokens.front();
-    return;
+CompilerParser::CompilerParser(std::list<Token*> tokens){
+    tkns = tokens;
+    currentTokenIndex=0;
 }
 
 /**
@@ -15,6 +15,7 @@ CompilerParser::CompilerParser(std::list<Token*> tokens) {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
+
     return NULL;
 }
 
@@ -142,7 +143,9 @@ ParseTree* CompilerParser::compileExpressionList() {
  * Advance to the next token
  */
 void CompilerParser::next(){
-    tokens = tokens->next;
+    if(currentTokenIndex < tkns.size()-1)
+    currentTokenIndex++;
+
     return;
 }
 
@@ -151,7 +154,11 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
-    return tokens;
+    Token* t = tkns.front();
+    for(int i = 0; i<currentTokenIndex; i++){
+        t++;
+    }
+    return t;
 }
 
 /**
@@ -159,11 +166,9 @@ Token* CompilerParser::current(){
  * @return true if a match, false otherwise
  */
 bool CompilerParser::have(std::string expectedType, std::string expectedValue){
-    while(tokens != NULL){
-        if(tokens->type == expectedType && tokens->value == expectedValue){
-            return true;
-        }
-        next();
+    Token* t = current();
+    if(t->getType() == expectedType && t->getValue() == expectedValue){
+        return true;
     }
     return false;
 }
@@ -174,11 +179,10 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  * @return the current token before advancing
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
-    while(tokens != NULL){
-        if(tokens->type == expectedType && tokens->value == expectedValue){
-            return tokens;
-        }
+    Token* t = current();
+    if(t->getType() == expectedType && t->getValue() == expectedValue){
         next();
+        return t;
     }
     throw ParseException();
     return NULL;
