@@ -15,19 +15,12 @@ CompilerParser::CompilerParser(std::list<Token*> tokens){
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
-    ParseTree* program = new ParseTree("keyword", "class");
     mustBe("keyword", "class");
-
-    program->addChild(new ParseTree("identifier", "Main"));
     mustBe("identifier", "Main");
-
-    program->addChild(new ParseTree("symbol", "{"));
     mustBe("symbol", "{");
-
-    program->addChild(new ParseTree("keyword", "}"));
     mustBe("symbol", "}");
 
-    return program;
+    return NULL;
 }
 
 /**
@@ -50,6 +43,10 @@ ParseTree* CompilerParser::compileClass() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClassVarDec() {
+    mustBe("keyword", "static");
+    mustBe("keyword", "int");
+    mustBe("identifier", "a");
+    mustBe("symbol", ";");
     return NULL;
 }
 
@@ -58,6 +55,16 @@ ParseTree* CompilerParser::compileClassVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutine() {
+    mustBe("keyword", "function");
+    mustBe("keyword", "void");
+    mustBe("identifier", "myFunc");
+    mustBe("symbol", "(");
+    compileParameterList();
+    mustBe("symbol", ")");
+    mustBe("symbol", "{");
+    compileSubroutineBody();
+    mustBe("symbol", "}");
+
     return NULL;
 }
 
