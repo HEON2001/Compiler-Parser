@@ -24,7 +24,7 @@ ParseTree* CompilerParser::compileProgram() {
     program->addChild(new ParseTree("symbol", "{"));
     mustBe("symbol", "{");
 
-    program->addChild(new ParseTree("keyword", "static"));
+    program->addChild(new ParseTree("keyword", "}"));
     mustBe("symbol", "}");
 
     return program;
