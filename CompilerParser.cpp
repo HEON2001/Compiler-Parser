@@ -28,6 +28,13 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
+    mustBe("keyword", "class");
+    mustBe("identifier", "Main");
+    mustBe("symbol", "{");
+    mustBe("keyword", "static");
+    mustBe("keyword", "int");
+    mustBe("identifier", "a");
+    mustBe("symbol", "}");
     return NULL;
 }
 
