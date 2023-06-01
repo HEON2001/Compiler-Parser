@@ -18,6 +18,12 @@ ParseTree* CompilerParser::compileProgram() {
     mustBe("keyword", "class");
     mustBe("identifier", "Main");
     mustBe("symbol", "{");
+    if(have("keyword", "static")||have("keyword", "field")){
+        compileClassVarDec();
+    }
+    if(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
+        compileSubroutine();
+    }
     mustBe("symbol", "}");
 
     return NULL;
