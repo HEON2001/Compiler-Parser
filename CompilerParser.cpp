@@ -73,6 +73,11 @@ ParseTree* CompilerParser::compileSubroutine() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileParameterList() {
+    mustBe ("keyword", "int");
+    mustBe ("identifier", "a");
+    mustBe ("symbol", ",");
+    mustBe ("keyword", "char");
+    mustBe ("identifier", "b");
     return NULL;
 }
 
@@ -81,6 +86,19 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
+    mustBe ("symbol", "{");
+    mustBe ("keyword", "var");
+    mustBe ("keyword", "int");
+    mustBe ("identifier", "a");
+    mustBe ("symbol", ";");
+    mustBe ("keyword", "let");
+    mustBe ("identifier", "a");
+    mustBe ("symbol", "=");
+    mustBe ("integerConstant", "1");
+    mustBe ("symbol", ";");
+    mustBe ("symbol", "}");
+
+
     return NULL;
 }
 
