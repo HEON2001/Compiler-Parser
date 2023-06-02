@@ -20,7 +20,7 @@ ParseTree* CompilerParser::compileProgram() {
     Token* t = mustBe("keyword", "class");
     std::string type = t->getType();
     std::string value = t->getValue();
-    ParseTree* pt = new ParseTree(type, value);
+    ParseTree* pt = new ParseTree("class", "");
     pt->addChild(new ParseTree(type, value));
 
     t = mustBe("identifier", "Main");
@@ -46,17 +46,32 @@ ParseTree* CompilerParser::compileProgram() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClass() {
-    mustBe("keyword", "class");
-    mustBe("identifier", current()->getValue());
-    mustBe("symbol", "{");
-    while(have("keyword", "static")||have("keyword", "field")){
-        compileClassVarDec();
+    Token* t = mustBe("keyword", "class");
+    std::string type = t->getType();
+    std::string value = t->getValue();
+    ParseTree* pt = new ParseTree("class", "");
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("identifier", "Main");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("symbol", "{");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    while(have("keyword", "static") || have("keyword", "field")){
+        pt->addChild(compileClassVarDec());
     }
-    while(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
-        compileSubroutine();
-    }
-    mustBe("symbol", "}");
-    return NULL;
+
+    t = mustBe("symbol", "}");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    return pt;
 }
 
 /**
@@ -64,11 +79,29 @@ ParseTree* CompilerParser::compileClass() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClassVarDec() {
-    mustBe("keyword", "static");
-    mustBe("keyword", "int");
-    mustBe("identifier", "a");
-    mustBe("symbol", ";");
-    return NULL;
+    Token* t = mustBe("keyword", "static");
+    std::string type = t->getType();
+    std::string value = t->getValue();
+    ParseTree* pt = new ParseTree("classVarDec", "");
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("keyword", "int");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("identifier", "a");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("symbol", ";");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    return pt;
+
 }
 
 /**
