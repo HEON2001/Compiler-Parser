@@ -230,7 +230,7 @@ ParseTree* CompilerParser::compileParameterList() {
     }
     type = t->getType();
     value = t->getValue();
-    pt->addChild(new ParseTree(type, value))
+    pt->addChild(new ParseTree(type, value));
     t = mustBe("identifier", identifier(current()->getValue()));
 
     while(have("symbol", ",")){
