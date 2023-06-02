@@ -15,18 +15,28 @@ CompilerParser::CompilerParser(std::list<Token*> tokens){
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
+    ParseTree* pt = new ParseTree("keyword", "class");
     mustBe("keyword", "class");
+    
+    pt->addChild(new ParseTree("identifier", "main"));
     mustBe("identifier", "Main");
+
+    pt->addChild(new ParseTree("symbol", "{"));
     mustBe("symbol", "{");
+
     while(have("keyword", "static")||have("keyword", "field")){
+        pt->addChild(compileClassVarDec());
         compileClassVarDec();
     }
     while(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
+        pt->addChild(compileSubroutine());
         compileSubroutine();
     }
+
+    pt->addChild(new ParseTree("symbol", "}"));
     mustBe("symbol", "}");
 
-    return NULL;
+    return pt;
 }
 
 /**
