@@ -18,10 +18,10 @@ ParseTree* CompilerParser::compileProgram() {
     mustBe("keyword", "class");
     mustBe("identifier", "Main");
     mustBe("symbol", "{");
-    if(have("keyword", "static")||have("keyword", "field")){
+    while(have("keyword", "static")||have("keyword", "field")){
         compileClassVarDec();
     }
-    if(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
+    while(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
         compileSubroutine();
     }
     mustBe("symbol", "}");
@@ -35,11 +35,14 @@ ParseTree* CompilerParser::compileProgram() {
  */
 ParseTree* CompilerParser::compileClass() {
     mustBe("keyword", "class");
-    mustBe("identifier", "Main");
+    mustBe("identifier", current()->getValue());
     mustBe("symbol", "{");
-    mustBe("keyword", "static");
-    mustBe("keyword", "int");
-    mustBe("identifier", "a");
+    while(have("keyword", "static")||have("keyword", "field")){
+        compileClassVarDec();
+    }
+    while(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
+        compileSubroutine();
+    }
     mustBe("symbol", "}");
     return NULL;
 }
