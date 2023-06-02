@@ -1,5 +1,7 @@
 #include "CompilerParser.h"
-
+#include <iostream>
+#include <iterator>
+#include <vector>
 
 /**
  * Constructor for the CompilerParser
@@ -20,7 +22,7 @@ ParseTree* CompilerParser::compileProgram() {
     std::string value = t->getValue();
     ParseTree* pt = new ParseTree(type, value);
 
-    t = mustBe("identifier", "Main");
+    t = mustBe("identifier", "MyClass");
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
@@ -125,6 +127,7 @@ ParseTree* CompilerParser::compileSubroutineBody() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileVarDec() {
+    mustBe("keyword", "var");
     return NULL;
 }
 
@@ -133,6 +136,7 @@ ParseTree* CompilerParser::compileVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileStatements() {
+    mustBe("keyword", "let");
     return NULL;
 }
 
@@ -141,6 +145,8 @@ ParseTree* CompilerParser::compileStatements() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileLet() {
+    mustBe("keyword", "let");
+
     return NULL;
 }
 
@@ -149,6 +155,8 @@ ParseTree* CompilerParser::compileLet() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileIf() {
+    mustBe("keyword", "if");
+
     return NULL;
 }
 
@@ -157,6 +165,8 @@ ParseTree* CompilerParser::compileIf() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileWhile() {
+    mustBe("keyword", "while");
+
     return NULL;
 }
 
@@ -165,6 +175,7 @@ ParseTree* CompilerParser::compileWhile() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileDo() {
+    mustBe("keyword", "do");
     return NULL;
 }
 
@@ -173,6 +184,8 @@ ParseTree* CompilerParser::compileDo() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileReturn() {
+    mustBe("keyword", "return");
+
     return NULL;
 }
 
@@ -181,6 +194,7 @@ ParseTree* CompilerParser::compileReturn() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpression() {
+    mustBe("integerConstant", "1");
     return NULL;
 }
 
@@ -189,6 +203,8 @@ ParseTree* CompilerParser::compileExpression() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileTerm() {
+    mustBe("integerConstant", "1");
+
     return NULL;
 }
 
@@ -197,6 +213,7 @@ ParseTree* CompilerParser::compileTerm() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpressionList() {
+    mustBe("integerConstant", "1");
     return NULL;
 }
 
@@ -215,8 +232,9 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
-    Token* t = tkns.front();
-    for(int i = 0; i<currentTokenIndex; i++){
+    Token* t= tkns.front();
+
+    for(int i = 0; i < currentTokenIndex; i++){
         t++;
     }
     return t;
@@ -241,11 +259,18 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
     Token* t = current();
+
     if(t->getType() == expectedType && t->getValue() == expectedValue){
+        std::cout<<t->getType()<<std::endl;
+        std::cout<<t->getValue()<<std::endl;
         next();
         return t;
+    }else{
+        std::cout<<t->getType()<<std::endl;
+        std::cout<<t->getValue()<<std::endl;
+        std::cout<<"error"<<std::endl;
+        throw ParseException();
     }
-    throw ParseException();
     return NULL;
 }
 
