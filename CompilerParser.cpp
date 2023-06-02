@@ -232,12 +232,10 @@ void CompilerParser::next(){
  * @return the Token
  */
 Token* CompilerParser::current(){
-    Token* t= tkns.front();
+    std::list<Token*>::iterator it = tkns.begin();
+    std::advance(it, currentTokenIndex);
 
-    for(int i = 0; i < currentTokenIndex; i++){
-        t++;
-    }
-    return t;
+    return it.operator*();
 }
 
 /**
@@ -261,14 +259,9 @@ Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValu
     Token* t = current();
 
     if(t->getType() == expectedType && t->getValue() == expectedValue){
-        std::cout<<t->getType()<<std::endl;
-        std::cout<<t->getValue()<<std::endl;
         next();
         return t;
     }else{
-        std::cout<<t->getType()<<std::endl;
-        std::cout<<t->getValue()<<std::endl;
-        std::cout<<"error"<<std::endl;
         throw ParseException();
     }
     return NULL;
