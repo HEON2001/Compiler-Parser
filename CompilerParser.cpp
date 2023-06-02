@@ -143,17 +143,61 @@ ParseTree* CompilerParser::compileClassVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutine() {
-    mustBe("keyword", "function");
-    mustBe("keyword", "void");
-    mustBe("identifier", "myFunc");
-    mustBe("symbol", "(");
-    compileParameterList();
-    mustBe("symbol", ")");
-    mustBe("symbol", "{");
-    compileSubroutineBody();
-    mustBe("symbol", "}");
+    Token* t=NULL;
+    if(have("keyword", "constructor")){
+        t = mustBe("keyword", "constructor");
+    }
+    else if(have("keyword", "function")){
+        t = mustBe("keyword", "function");
+    }
+    else if(have("keyword", "method")){
+        t = mustBe("keyword", "method");
+    }
+    std::string type = t->getType();
+    std::string value = t->getValue();
+    ParseTree* pt = new ParseTree("Subroutine", "");
+    pt->addChild(new ParseTree(type, value));
 
-    return NULL;
+    if(have("keyword", "void")){
+        t = mustBe("keyword", "void");
+    }
+    else if(have("keyword", "int")){
+        t = mustBe("keyword", "int");
+    }
+    else if(have("keyword", "char")){
+        t = mustBe("keyword", "char");
+    }
+    else if(have("keyword", "boolean")){
+        t = mustBe("keyword", "boolean");
+    }
+    else if(have("identifier", identifier(current()->getValue()))){
+        t = mustBe("identifier", current()->getValue());
+    }
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("identifier", identifier(current()->getValue()));
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("symbol", "(");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    pt->addChild(compileParameterList());
+
+    t = mustBe("symbol", ")");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    pt->addChild(compileSubroutineBody());
+
+    return pt;
+
 }
 
 /**
@@ -161,11 +205,6 @@ ParseTree* CompilerParser::compileSubroutine() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileParameterList() {
-    mustBe ("keyword", "int");
-    mustBe ("identifier", "a");
-    mustBe ("symbol", ",");
-    mustBe ("keyword", "char");
-    mustBe ("identifier", "b");
     return NULL;
 }
 
@@ -174,18 +213,6 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
-    mustBe ("symbol", "{");
-    mustBe ("keyword", "var");
-    mustBe ("keyword", "int");
-    mustBe ("identifier", "a");
-    mustBe ("symbol", ";");
-    mustBe ("keyword", "let");
-    mustBe ("identifier", "a");
-    mustBe ("symbol", "=");
-    mustBe ("integerConstant", "1");
-    mustBe ("symbol", ";");
-    mustBe ("symbol", "}");
-
 
     return NULL;
 }
@@ -195,7 +222,6 @@ ParseTree* CompilerParser::compileSubroutineBody() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileVarDec() {
-    mustBe("keyword", "var");
     return NULL;
 }
 
@@ -204,7 +230,6 @@ ParseTree* CompilerParser::compileVarDec() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileStatements() {
-    mustBe("keyword", "let");
     return NULL;
 }
 
@@ -213,7 +238,6 @@ ParseTree* CompilerParser::compileStatements() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileLet() {
-    mustBe("keyword", "let");
 
     return NULL;
 }
@@ -223,7 +247,6 @@ ParseTree* CompilerParser::compileLet() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileIf() {
-    mustBe("keyword", "if");
 
     return NULL;
 }
@@ -233,7 +256,6 @@ ParseTree* CompilerParser::compileIf() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileWhile() {
-    mustBe("keyword", "while");
 
     return NULL;
 }
@@ -243,7 +265,6 @@ ParseTree* CompilerParser::compileWhile() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileDo() {
-    mustBe("keyword", "do");
     return NULL;
 }
 
@@ -252,7 +273,6 @@ ParseTree* CompilerParser::compileDo() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileReturn() {
-    mustBe("keyword", "return");
 
     return NULL;
 }
@@ -262,7 +282,6 @@ ParseTree* CompilerParser::compileReturn() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpression() {
-    mustBe("integerConstant", "1");
     return NULL;
 }
 
@@ -271,7 +290,6 @@ ParseTree* CompilerParser::compileExpression() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileTerm() {
-    mustBe("integerConstant", "1");
 
     return NULL;
 }
@@ -281,7 +299,6 @@ ParseTree* CompilerParser::compileTerm() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpressionList() {
-    mustBe("integerConstant", "1");
     return NULL;
 }
 
