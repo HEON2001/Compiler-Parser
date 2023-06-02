@@ -104,17 +104,30 @@ ParseTree* CompilerParser::compileClassVarDec() {
     else if(have("keyword", "boolean")){
         t = mustBe("keyword", "boolean");
     }
-    else if(have("identifier", current()->getValue())){
+    else if(have("identifier", identifier(current()->getValue()))){
         t = mustBe("identifier", current()->getValue());
     }
+
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("identifier", "a");
+    t = mustBe("identifier", identifier(current()->getValue()));
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
+
+    while(have("symbol", ",")){
+        t = mustBe("symbol", ",");
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+
+        t = mustBe("identifier", identifier(current()->getValue()));
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+    }
 
     t = mustBe("symbol", ";");
     type = t->getType();
