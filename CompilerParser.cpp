@@ -21,6 +21,7 @@ ParseTree* CompilerParser::compileProgram() {
     std::string type = t->getType();
     std::string value = t->getValue();
     ParseTree* pt = new ParseTree(type, value);
+    pt->addChild(new ParseTree(type, value));
 
     t = mustBe("identifier", "MyClass");
     type = t->getType();
