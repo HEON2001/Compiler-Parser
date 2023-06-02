@@ -89,7 +89,10 @@ ParseTree* CompilerParser::compileClassVarDec() {
     }
     else if(have("keyword", "field")){
         t = mustBe("keyword", "field");
+    }else{
+        throw ParseException();
     }
+
     std::string type = t->getType();
     std::string value = t->getValue();
     ParseTree* pt = new ParseTree("classVarDec", "");
@@ -106,6 +109,8 @@ ParseTree* CompilerParser::compileClassVarDec() {
     }
     else if(have("identifier", identifier(current()->getValue()))){
         t = mustBe("identifier", current()->getValue());
+    }else{
+        throw ParseException();
     }
 
     type = t->getType();
@@ -152,6 +157,8 @@ ParseTree* CompilerParser::compileSubroutine() {
     }
     else if(have("keyword", "method")){
         t = mustBe("keyword", "method");
+    }else{
+        throw ParseException();
     }
     std::string type = t->getType();
     std::string value = t->getValue();
@@ -172,6 +179,8 @@ ParseTree* CompilerParser::compileSubroutine() {
     }
     else if(have("identifier", identifier(current()->getValue()))){
         t = mustBe("identifier", current()->getValue());
+    }else{
+        throw ParseException();
     }
     type = t->getType();
     value = t->getValue();
@@ -227,6 +236,8 @@ ParseTree* CompilerParser::compileParameterList() {
     }
     else if(have("identifier", identifier(current()->getValue()))){
         t = mustBe("identifier", current()->getValue());
+    }else{
+        throw ParseException();
     }
     type = t->getType();
     value = t->getValue();
@@ -236,21 +247,23 @@ ParseTree* CompilerParser::compileParameterList() {
     while(have("symbol", ",")){
         if(have("keyword", "int")){
         t = mustBe("keyword", "int");
-    }
-    else if(have("keyword", "char")){
-        t = mustBe("keyword", "char");
-    }
-    else if(have("keyword", "boolean")){
-        t = mustBe("keyword", "boolean");
-    }
-    else if(have("identifier", identifier(current()->getValue()))){
-        t = mustBe("identifier", current()->getValue());
-    }
-    type = t->getType();
-    value = t->getValue();
-    pt->addChild(new ParseTree(type, value));
+        }
+        else if(have("keyword", "char")){
+            t = mustBe("keyword", "char");
+        }
+        else if(have("keyword", "boolean")){
+            t = mustBe("keyword", "boolean");
+        }
+        else if(have("identifier", identifier(current()->getValue()))){
+            t = mustBe("identifier", current()->getValue());
+        }else{
+            throw ParseException();
+        }
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("identifier", identifier(current()->getValue()));
+        t = mustBe("identifier", identifier(current()->getValue()));
     }
 
     return pt;
@@ -313,6 +326,8 @@ ParseTree* CompilerParser::compileVarDec() {
     }
     else if(have("identifier", identifier(current()->getValue()))){
         t = mustBe("identifier", current()->getValue());
+    }else{
+        throw ParseException();
     }
 
     type = t->getType();
