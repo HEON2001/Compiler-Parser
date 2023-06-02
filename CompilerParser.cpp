@@ -15,26 +15,25 @@ CompilerParser::CompilerParser(std::list<Token*> tokens){
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileProgram() {
-    ParseTree* pt = new ParseTree("keyword", "class");
-    mustBe("keyword", "class");
-    
-    pt->addChild(new ParseTree("identifier", "main"));
-    mustBe("identifier", "Main");
+    Token* t = mustBe("keyword", "class");
+    std::string type = t->getType();
+    std::string value = t->getValue();
+    ParseTree* pt = new ParseTree(type, value);
 
-    pt->addChild(new ParseTree("symbol", "{"));
-    mustBe("symbol", "{");
+    t = mustBe("identifier", "Main");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
 
-    while(have("keyword", "static")||have("keyword", "field")){
-        pt->addChild(compileClassVarDec());
-        compileClassVarDec();
-    }
-    while(have("keyword", "function")||have("keyword", "method")||have("keyword", "constructor")){
-        pt->addChild(compileSubroutine());
-        compileSubroutine();
-    }
+    t = mustBe("symbol", "{");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
 
-    pt->addChild(new ParseTree("symbol", "}"));
-    mustBe("symbol", "}");
+    t = mustBe("symbol", "}");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
 
     return pt;
 }
