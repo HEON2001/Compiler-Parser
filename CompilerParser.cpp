@@ -268,7 +268,7 @@ ParseTree* CompilerParser::compileParameterList() {
         }else{
             throw ParseException();
         }
-        
+
         type = t->getType();
         value = t->getValue();
         pt->addChild(new ParseTree(type, value));
@@ -286,31 +286,31 @@ ParseTree* CompilerParser::compileParameterList() {
  * Generates a parse tree for a subroutine's body
  * @return a ParseTree
  */
-ParseTree* CompilerParser::compileSubroutineBody() {
-    Token* t=NULL;
-    std::string type;
-    std::string value;
+// ParseTree* CompilerParser::compileSubroutineBody() {
+//     Token* t=NULL;
+//     std::string type;
+//     std::string value;
 
-    ParseTree* pt = new ParseTree("subroutineBody", "");
+//     ParseTree* pt = new ParseTree("subroutineBody", "");
 
-    t = mustBe("symbol", "{");
-    type = t->getType();
-    value = t->getValue();
-    pt->addChild(new ParseTree(type, value));
+//     t = mustBe("symbol", "{");
+//     type = t->getType();
+//     value = t->getValue();
+//     pt->addChild(new ParseTree(type, value));
 
-    while(have("keyword", "var")){
-        pt->addChild(compileVarDec());
-    }
+//     while(have("keyword", "var")){
+//         pt->addChild(compileVarDec());
+//     }
 
-    pt->addChild(compileStatements());
+//     pt->addChild(compileStatements());
 
-    t = mustBe("symbol", "}");
-    type = t->getType();
-    value = t->getValue();
-    pt->addChild(new ParseTree(type, value));
+//     t = mustBe("symbol", "}");
+//     type = t->getType();
+//     value = t->getValue();
+//     pt->addChild(new ParseTree(type, value));
 
-    return pt;
-}
+//     return pt;
+// }
 
 /**
  * Generates a parse tree for a subroutine variable declaration
