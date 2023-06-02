@@ -66,6 +66,9 @@ ParseTree* CompilerParser::compileClass() {
     while(have("keyword", "static") || have("keyword", "field")){
         pt->addChild(compileClassVarDec());
     }
+    while(have("keyword", "constructor") || have("keyword", "function") || have("keyword", "method")){
+        pt->addChild(compileSubroutine());
+    }
 
     t = mustBe("symbol", "}");
     type = t->getType();
