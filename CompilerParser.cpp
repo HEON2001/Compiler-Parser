@@ -242,9 +242,18 @@ ParseTree* CompilerParser::compileParameterList() {
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
+
     t = mustBe("identifier", identifier(current()->getValue()));
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
 
     while(have("symbol", ",")){
+        t = mustBe("symbol", ",");
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+
         if(have("keyword", "int")){
         t = mustBe("keyword", "int");
         }
@@ -259,11 +268,15 @@ ParseTree* CompilerParser::compileParameterList() {
         }else{
             throw ParseException();
         }
+        
         type = t->getType();
         value = t->getValue();
         pt->addChild(new ParseTree(type, value));
 
         t = mustBe("identifier", identifier(current()->getValue()));
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
     }
 
     return pt;
