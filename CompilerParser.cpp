@@ -187,15 +187,20 @@ ParseTree* CompilerParser::compileSubroutine() {
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
 
-    pt->addChild(compileParameterList());
+    if(!have("symbol", ")")){
+        pt->addChild(compileParameterList());
+    }
+    
 
     t = mustBe("symbol", ")");
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
 
-    pt->addChild(compileSubroutineBody());
 
+    pt->addChild(compileSubroutineBody());
+   
+    
     return pt;
 
 }
@@ -205,7 +210,50 @@ ParseTree* CompilerParser::compileSubroutine() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileParameterList() {
-    return NULL;
+    Token* t=NULL;
+    std::string type;
+    std::string value;
+
+    ParseTree* pt = new ParseTree("parameterList", "");
+    
+    if(have("keyword", "int")){
+        t = mustBe("keyword", "int");
+    }
+    else if(have("keyword", "char")){
+        t = mustBe("keyword", "char");
+    }
+    else if(have("keyword", "boolean")){
+        t = mustBe("keyword", "boolean");
+    }
+    else if(have("identifier", identifier(current()->getValue()))){
+        t = mustBe("identifier", current()->getValue());
+    }
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value))
+    t = mustBe("identifier", identifier(current()->getValue()));
+
+    while(have("symbol", ",")){
+        if(have("keyword", "int")){
+        t = mustBe("keyword", "int");
+    }
+    else if(have("keyword", "char")){
+        t = mustBe("keyword", "char");
+    }
+    else if(have("keyword", "boolean")){
+        t = mustBe("keyword", "boolean");
+    }
+    else if(have("identifier", identifier(current()->getValue()))){
+        t = mustBe("identifier", current()->getValue());
+    }
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("identifier", identifier(current()->getValue()));
+    }
+
+    return pt;
 }
 
 /**
@@ -213,8 +261,29 @@ ParseTree* CompilerParser::compileParameterList() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileSubroutineBody() {
+    Token* t=NULL;
+    std::string type;
+    std::string value;
 
-    return NULL;
+    ParseTree* pt = new ParseTree("subroutineBody", "");
+
+    t = mustBe("symbol", "{");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    while(have("keyword", "var")){
+        pt->addChild(compileVarDec());
+    }
+
+    pt->addChild(compileStatements());
+
+    t = mustBe("symbol", "}");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    return pt;
 }
 
 /**
@@ -222,7 +291,57 @@ ParseTree* CompilerParser::compileSubroutineBody() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileVarDec() {
-    return NULL;
+    Token* t=NULL;
+    std::string type;
+    std::string value;
+
+    ParseTree* pt = new ParseTree("varDec", "");
+
+    t = mustBe("keyword", "var");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    if(have("keyword", "int")){
+        t = mustBe("keyword", "int");
+    }
+    else if(have("keyword", "char")){
+        t = mustBe("keyword", "char");
+    }
+    else if(have("keyword", "boolean")){
+        t = mustBe("keyword", "boolean");
+    }
+    else if(have("identifier", identifier(current()->getValue()))){
+        t = mustBe("identifier", current()->getValue());
+    }
+
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    t = mustBe("identifier", identifier(current()->getValue()));
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    while(have("symbol", ",")){
+        t = mustBe("symbol", ",");
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+
+        t = mustBe("identifier", identifier(current()->getValue()));
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+    }
+
+    t = mustBe("symbol", ";");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    return pt;
 }
 
 /**
