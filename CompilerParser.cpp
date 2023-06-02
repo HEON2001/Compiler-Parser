@@ -52,7 +52,7 @@ ParseTree* CompilerParser::compileClass() {
     ParseTree* pt = new ParseTree("class", "");
     pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("identifier", "Main");
+    t = mustBe("identifier", current()->getValue());
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
