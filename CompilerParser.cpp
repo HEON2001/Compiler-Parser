@@ -20,10 +20,10 @@ ParseTree* CompilerParser::compileProgram() {
     Token* t = mustBe("keyword", "class");
     std::string type = t->getType();
     std::string value = t->getValue();
-    ParseTree* pt = new ParseTree(value, value);
+    ParseTree* pt = new ParseTree("class", "");
     pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("identifier", "MyClass");
+    t = mustBe("identifier", "Main");
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
