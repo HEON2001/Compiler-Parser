@@ -15,13 +15,13 @@ int main(int argc, char *argv[]) {
     list<Token*> tokens;
     
     tokens.push_back(new Token("keyword", "class"));
-    tokens.push_back(new Token("identifier", "MyClass"));
+    tokens.push_back(new Token("identifier", "wassuuuu4p"));
     tokens.push_back(new Token("symbol", "{"));
     tokens.push_back(new Token("symbol", "}"));
 
     try {
         CompilerParser parser(tokens);
-        ParseTree* result = parser.compileProgram();
+        ParseTree* result = parser.compileClass();
         if (result != NULL){
             cout << result->tostring() << endl;
         }

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
+#include <cstring>
 
 /**
  * Constructor for the CompilerParser
@@ -52,7 +53,7 @@ ParseTree* CompilerParser::compileClass() {
     ParseTree* pt = new ParseTree("class", "");
     pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("identifier", current()->getValue());
+    t = mustBe("identifier", identifier(current()->getValue()));
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
@@ -79,13 +80,30 @@ ParseTree* CompilerParser::compileClass() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileClassVarDec() {
-    Token* t = mustBe("keyword", "static");
+    Token* t=NULL;
+    if(have("keyword", "static")){
+        t = mustBe("keyword", "static");
+    }
+    else if(have("keyword", "field")){
+        t = mustBe("keyword", "field");
+    }
     std::string type = t->getType();
     std::string value = t->getValue();
     ParseTree* pt = new ParseTree("classVarDec", "");
     pt->addChild(new ParseTree(type, value));
 
-    t = mustBe("keyword", "int");
+    if(have("keyword", "int")){
+        t = mustBe("keyword", "int");
+    }
+    else if(have("keyword", "char")){
+        t = mustBe("keyword", "char");
+    }
+    else if(have("keyword", "boolean")){
+        t = mustBe("keyword", "boolean");
+    }
+    else if(have("identifier", current()->getValue())){
+        t = mustBe("identifier", current()->getValue());
+    }
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
@@ -299,6 +317,13 @@ Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValu
         throw ParseException();
     }
     return NULL;
+}
+
+std::string CompilerParser::identifier(std::string value){
+    if(value[0]=='_'||isalpha(value[0])==0){
+        throw ParseException();
+    }
+    return value;
 }
 
 /**
