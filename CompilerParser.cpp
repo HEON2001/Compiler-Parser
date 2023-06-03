@@ -634,10 +634,7 @@ ParseTree* CompilerParser::compileExpression() {
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
     }else if(have("integerConstant", current()->getValue())) {
-        t=mustBe("integerConstant", current()->getValue());
-        type = t->getType();
-        value = t->getValue();
-        pt->addChild(new ParseTree(type, value));
+        pt->addChild(compileTerm());
     }
 
     return pt;
@@ -648,8 +645,20 @@ ParseTree* CompilerParser::compileExpression() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileTerm() {
+    Token* t=NULL;
+    std::string type;
+    std::string value;
 
-    return NULL;
+    ParseTree* pt = new ParseTree("term", "");
+
+    if(have("integerConstant", current()->getValue())){
+        t=mustBe("integerConstant", current()->getValue());
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+    }
+
+    return pt;
 }
 
 /**
