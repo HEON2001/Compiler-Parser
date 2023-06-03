@@ -628,10 +628,17 @@ ParseTree* CompilerParser::compileExpression() {
 
     ParseTree* pt = new ParseTree("expression", "");
 
+    if(have("keyword", "skip")){
     t = mustBe("keyword", "skip");
     type = t->getType();
     value = t->getValue();
     pt->addChild(new ParseTree(type, value));
+    }else if(have("integerConstant", current()->getValue())) {
+        t=mustBe("integerConstant", current()->getValue());
+        type = t->getType();
+        value = t->getValue();
+        pt->addChild(new ParseTree(type, value));
+    }
 
     return pt;
 }
