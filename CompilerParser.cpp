@@ -716,7 +716,7 @@ bool CompilerParser::have(std::string expectedType, std::string expectedValue){
  * @return the current token before advancing
  */
 Token* CompilerParser::mustBe(std::string expectedType, std::string expectedValue){
-    Token* t = current();
+    Token* t= current();
 
     if(t->getType() == expectedType && t->getValue() == expectedValue){
         next();
