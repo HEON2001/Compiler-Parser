@@ -302,9 +302,7 @@ ParseTree* CompilerParser::compileSubroutineBody() {
         pt->addChild(compileVarDec());
     }
 
-    while(have("keyword", "let") || have("keyword", "if") || have("keyword", "while") || have("keyword", "do") || have("keyword", "return")){
-        pt->addChild(compileStatements());
-    }
+    pt->addChild(compileStatements());
 
     t = mustBe("symbol", "}");
     type = t->getType();
@@ -386,22 +384,25 @@ ParseTree* CompilerParser::compileStatements() {
 
     ParseTree* pt = new ParseTree("statements", "");
 
-    if(have("keyword", "let")){
-        pt->addChild(compileLet());
-    }
-    else if(have("keyword", "if")){
-        pt->addChild(compileIf());
-    }
-    else if(have("keyword", "while")){
-        pt->addChild(compileWhile());
-    }
-    else if(have("keyword", "do")){
-        pt->addChild(compileDo());
-    }
-    else if(have("keyword", "return")){
-        pt->addChild(compileReturn());
-    }else{
-        throw ParseException();
+    while(have("keyword", "let") || have("keyword", "if") || have("keyword", "while") || have("keyword", "do") || have("keyword", "return")){
+        if(have("keyword", "let")){
+            pt->addChild(compileLet());
+        }
+        else if(have("keyword", "if")){
+            pt->addChild(compileIf());
+        }
+        else if(have("keyword", "while")){
+            pt->addChild(compileWhile());
+        }
+        else if(have("keyword", "do")){
+            pt->addChild(compileDo());
+        }
+        else if(have("keyword", "return")){
+            pt->addChild(compileReturn());
+        }
+        else{
+            throw ParseException();
+        }
     }
 
     return pt;
@@ -621,8 +622,18 @@ ParseTree* CompilerParser::compileReturn() {
  * @return a ParseTree
  */
 ParseTree* CompilerParser::compileExpression() {
+    Token* t=NULL;
+    std::string type;
+    std::string value;
 
-    return NULL;
+    ParseTree* pt = new ParseTree("expression", "");
+
+    t = mustBe("keyword", "skip");
+    type = t->getType();
+    value = t->getValue();
+    pt->addChild(new ParseTree(type, value));
+
+    return pt;
 }
 
 /**
